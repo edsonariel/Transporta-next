@@ -1,0 +1,239 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model bitacora {
+  id            BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  id_ot         Int
+  fecha_ingreso DateTime @db.DateTime(0)
+  id_usuario    Int
+  descripcion   String   @db.Text
+  multimedia    String   @db.Text
+}
+
+model clientes {
+  id               Int      @id @default(autoincrement())
+  nombre           String   @db.Text
+  documento        Int
+  NIT              String   @db.VarChar(50)
+  email            String   @db.Text
+  telefono         String   @db.Text
+  direccion        String   @db.Text
+  fecha_nacimiento DateTime @db.Date
+  compras          Int
+  ultima_compra    DateTime @db.DateTime(0)
+  fecha            DateTime @default(now()) @db.Timestamp(0)
+  clasificacion    String   @default("000") @db.VarChar(5)
+  password         String   @db.Text
+  dispositivo      String   @db.Text
+  tokenfirebase    String   @db.Text
+}
+
+model cobertura {
+  id                BigInt @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  id_flota          Int
+  pais              String @db.Text
+  direccion         String @db.Text
+  latitude          String @db.Text
+  longitude         String @db.Text
+  nombre_contacto   String @db.Text
+  telefono_contacto String @db.Text
+  email_contacto    String @db.Text
+  mexico            String @db.Text
+  guatemala         String @db.Text
+  belice            String @db.Text
+  honduras          String @db.Text
+  el_salvador       String @db.Text
+  nicaragua         String @db.Text
+  costa_rica        String @db.Text
+  panama            String @db.Text
+}
+
+model direcciones {
+  id               BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  id_cliente       Int      @default(0)
+  fecha_ingreso    DateTime @default(now()) @db.DateTime(0)
+  nombre           String   @db.Text
+  direccion        String   @db.Text
+  punto_referencia String   @db.Text
+  contacto         String   @db.Text
+  telefono         String   @db.Text
+  latitude         String   @db.Text
+  longitude        String   @db.Text
+  pais             String   @db.Text
+}
+
+model estados {
+  id           BigInt @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  nombre       String @db.Text
+  color        String @db.Text
+  color_pastel String @db.Text
+}
+
+model estados_liquidacion {
+  id     BigInt @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  nombre String @db.Text
+}
+
+model miempresa {
+  id                     Int     @id @default(autoincrement())
+  nombre                 String? @db.Text
+  razon_social_miempresa String? @db.Text
+  nit_miempresa          String? @db.Text
+  nrc_miempresa          String? @db.Text
+  logo_miempresa         String? @db.Text
+}
+
+model ot {
+  id                       BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  fecha_ingreso            DateTime @default(now()) @db.DateTime(0)
+  id_usuario               Int
+  id_cliente               Int
+  id_tipo_carga            Int
+  peso                     String   @db.Text
+  volumen                  String   @db.Text
+  bultos                   String   @db.Text
+  custodios                Int      @default(0)
+  cargadores               Int      @default(0)
+  indicaciones             String   @db.Text
+  fecha_ejecucion          DateTime @db.DateTime(0)
+  hora_ejecucion           String   @db.Text
+  id_direccion_retiro      Int
+  id_direccion_origen      Int
+  id_direccion_destino     Int
+  distancia                String?  @db.Text
+  id_piloto                Int
+  id_estado                Int      @default(1)
+  prioridad                Int      @default(0)
+  numero_factura_proveedor String   @db.Text
+  imagen_factura_proveedor String   @db.Text
+  fecha_carga_factura      DateTime @db.Date
+  id_proveedor             Int
+  id_vehiculo              Int
+  id_estado_liquidacion    Int
+  fecha_liquidado          DateTime @default(now()) @db.DateTime(0)
+  ingreso                  String   @db.Text
+  comision                 String   @db.Text
+  total                    String   @db.Text
+  imagen_comprobante       String   @db.Text
+  telefono_origen          String   @db.Text
+  telefono_destino         String   @db.Text
+}
+
+model pilotos {
+  id                     Int      @id @default(autoincrement())
+  id_flota               Int      @default(0)
+  nombre                 String   @db.Text
+  usuario                String   @db.Text
+  password               String   @db.Text
+  perfil                 String   @db.Text
+  foto                   String   @db.Text
+  dui                    String   @db.Text
+  numero_licencia        String   @db.Text
+  estado                 Int
+  ultimo_login           DateTime @db.DateTime(0)
+  fecha                  DateTime @default(now()) @db.Timestamp(0)
+  Cargo                  String   @db.Text
+  firebase_id            String   @db.Text
+  fecha_nacimiento       DateTime @db.Date
+  pasaporte              String   @db.Text
+  foto_licencia_conducir String   @db.Text
+  cobertura              String   @db.Text
+}
+
+model tbl_dispositivo_movil {
+  id_dispositivo BigInt   @id @unique(map: "id_dispositivo") @default(autoincrement()) @db.UnsignedBigInt
+  id_usuario     Int
+  fecha_asociado DateTime @default(now()) @db.DateTime(0)
+  marca          String   @db.VarChar(30)
+  modelo         String   @db.VarChar(30)
+  sim            String   @db.VarChar(30)
+  mcc            String   @db.VarChar(11)
+  mnc            String   @db.VarChar(11)
+}
+
+model tbl_facturas_comisiones {
+  id              BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  fecha_facturado DateTime @default(now()) @db.DateTime(0)
+  id_proveedor    Int
+  monto           String   @db.Text
+  numero_factura  String   @db.Text
+}
+
+model tbl_flota_afiliada {
+  id        BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  nombre    String   @db.Text
+  direccion String   @db.Text
+  telefono  String   @db.Text
+  email     String   @db.Text
+  NRC       String   @db.Text
+  NIT       String   @db.Text
+  GIRO      String   @db.Text
+  fecha     DateTime @default(now()) @db.Timestamp(0)
+}
+
+model tipo_vehiculo {
+  id     BigInt @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  nombre String @db.Text
+}
+
+model tnl_proveedor_cotizacion {
+  id             BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  idOt           Int
+  idProveedor    Int
+  fecha_ofertado DateTime @default(now()) @db.Timestamp(0)
+  montoOferta    String   @db.Text
+  estado         String   @db.Text
+  fecha_salida   DateTime @default(now()) @db.DateTime(0)
+}
+
+model tracking {
+  id             BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  fecha_registro DateTime @db.DateTime(0)
+  id_piloto      Int
+  latitude       String   @db.Text
+  longitude      String   @db.Text
+}
+
+model usuarios {
+  id                         Int      @id @default(autoincrement())
+  nombre                     String   @db.Text
+  usuario                    String   @db.Text
+  password                   String   @db.Text
+  perfil                     String   @db.Text
+  foto                       String   @db.Text
+  estado                     Int
+  ultimo_login               DateTime @db.DateTime(0)
+  fecha                      DateTime @default(now()) @db.Timestamp(0)
+  Cargo                      String   @db.Text
+  id_monitoreo               Int      @default(0)
+  id_monitoreo_flota         Int      @default(0)
+  idcliente                  Int?
+  idFlotaProveedor           Int?
+  nombre_propietario_tarjeta String?  @db.VarChar(60)
+  correo                     String?  @db.Text
+  telefono                   String?  @db.Text
+  singleUse                  Int?
+  numero_tarjeta             String?  @db.Text
+  mes_exp_tarjeta            String?  @db.Text
+  cvv_tarjeta                String?  @db.Text
+  ao_exp_tarjeta             String?  @db.Text
+}
+
+model vehiculo {
+  id               BigInt @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  id_tipo_vehiculo Int
+  marca            String @db.Text
+  modelo           String @db.Text
+  anio             String @db.Text
+  color            String @db.Text
+  placa_cabezal    String @db.Text
+  placa_remolque   String @db.Text
+  codigo           String @db.Text
+  id_flota         Int
+}
